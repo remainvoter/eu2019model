@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "/home/drnick/.local/share/virtualenvs/eu2019model-QQ-l2gTC/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
+}

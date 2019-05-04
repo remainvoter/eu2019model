@@ -14,6 +14,8 @@ pytest-runner = "*"
 PyInstaller = "*"
 Sphinx = "*"
 twine = "*"
+v = {editable = true,version = "*"}
+pylint = "*"
 
 [packages]
 click = "*"
