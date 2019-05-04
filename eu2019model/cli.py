@@ -5,11 +5,17 @@ import sys
 import click
 
 from .dhondt import Dhondt, Party
+from .utilities import PostCode, loadProjections
 
 
 @click.command()
 def main(args=None):
     """Console script for eu2019model."""
+
+    loadProjections()
+
+    pc = PostCode('Ne29 6tA')
+    print(pc.getRegion())
 
     # Create a vote:
     dh = Dhondt(8)

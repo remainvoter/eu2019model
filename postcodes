@@ -1,0 +1,91 @@
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "projection";
+CREATE TABLE IF NOT EXISTS "projection" (
+	"projection_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"party"	TEXT NOT NULL,
+	"region"	TEXT NOT NULL,
+	"votes"	REAL NOT NULL
+);
+DROP TABLE IF EXISTS "intention";
+CREATE TABLE IF NOT EXISTS "intention" (
+	"intended_id"	INTEGER NOT NULL UNIQUE,
+	"intended_party"	TEXT NOT NULL,
+	"voted_year"	INTEGER NOT NULL,
+	"voted_party"	TEXT NOT NULL,
+	"percentage"	REAL NOT NULL,
+	PRIMARY KEY("intended_id")
+);
+DROP TABLE IF EXISTS "parties";
+CREATE TABLE IF NOT EXISTS "parties" (
+	"name"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("name")
+);
+DROP TABLE IF EXISTS "regions";
+CREATE TABLE IF NOT EXISTS "regions" (
+	"eu_region"	TEXT NOT NULL UNIQUE,
+	"num_seats"	INTEGER NOT NULL,
+	"population"	INTEGER NOT NULL,
+	"turnout"	REAL NOT NULL,
+	PRIMARY KEY("eu_region")
+);
+DROP TABLE IF EXISTS "postcodes";
+CREATE TABLE IF NOT EXISTS "postcodes" (
+	"postcode_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"postcode"	TEXT NOT NULL UNIQUE,
+	"latitude"	REAL,
+	"longitude"	REAL,
+	"eu_region"	TEXT NOT NULL
+);
+DROP INDEX IF EXISTS "postcode_index";
+CREATE UNIQUE INDEX IF NOT EXISTS "postcode_index" ON "postcodes" (
+	"postcode"	ASC
+);
+INSERT INTO "intention" VALUES (1,'Brexit Party',2017,'Conservative',53.0),
+ (2,'Change UK',2017,'Conservative',7.0),
+ (3,'Conservative',2017,'Conservative',27.0),
+ (4,'Green',2017,'Conservative',2.0),
+ (5,'Labour',2017,'Conservative',1.0),
+ (6,'Liberal Democrat',2017,'Conservative',2.0),
+ (7,'SNP/Plaid Cymru',2017,'Conservative',0.0),
+ (8,'Other',2017,'Conservative',0.0),
+ (9,'UKIP',2017,'Conservative',6.0),
+ (10,'Brexit Party',2017,'Labour',9.0),
+ (11,'Change UK',2017,'Labour',12.0),
+ (12,'Conservative',2017,'Labour',2.0),
+ (13,'Green',2017,'Labour',14.0),
+ (14,'Labour',2017,'Labour',52.0),
+ (15,'Liberal Democrat',2017,'Labour',6.0),
+ (16,'SNP/Plaid Cymru',2017,'Labour',2.0),
+ (17,'Other',2017,'Labour',1.0),
+ (18,'UKIP',2017,'Labour',3.0),
+ (19,'Brexit Party',2017,'Liberal Democrat',5.0),
+ (20,'Change UK',2017,'Liberal Democrat',28.0),
+ (21,'Conservative',2017,'Liberal Democrat',2.0),
+ (22,'Green',2017,'Liberal Democrat',14.0),
+ (23,'Labour',2017,'Liberal Democrat',4.0),
+ (24,'Liberal Democrat',2017,'Liberal Democrat',45.0),
+ (25,'SNP/Plaid Cymru',2017,'Liberal Democrat',0.0),
+ (26,'Other',2017,'Liberal Democrat',0.0),
+ (27,'UKIP',2017,'Liberal Democrat',1.0);
+INSERT INTO "parties" VALUES ('Brexit Party'),
+ ('Change UK'),
+ ('Conservative'),
+ ('Green'),
+ ('Labour'),
+ ('Liberal Democrat'),
+ ('SNP/Plaid Cymru'),
+ ('Other'),
+ ('UKIP');
+INSERT INTO "regions" VALUES ('South East',10,6433337,36.5),
+ ('Yorkshire and The Humber',6,3870749,33.5),
+ ('Northern Ireland',3,1225771,51.89),
+ ('Wales',4,2327175,31.5),
+ ('North East',3,1969747,30.9),
+ ('North West',8,5237871,33.5),
+ ('West Midlands',7,4106375,33.1),
+ ('Scotland',6,4010397,33.5),
+ ('London',8,6608033,33.3),
+ ('South West',6,4062632,37.0),
+ ('Eastern',7,4385365,35.9),
+ ('East Midlands',7,3375669,33.2);
+COMMIT;

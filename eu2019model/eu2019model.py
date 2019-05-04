@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List
 
-from .dhondt import Dhondt
-
 
 class Party(object):
 
@@ -33,8 +31,15 @@ class Party(object):
 class Region(object):
 
     def __init__(self, name: str, parties: List[Party], numOfSeats: int):
+        from .dhondt import Dhondt
         self.dh = Dhondt(numOfSeats)
         self.dh.addParties(parties)
+
+
+class Projection(object):
+
+    def __init__(self, party: Party, region: Region):
+        pass
 
 
 class RecommendationEngine(object):
@@ -44,14 +49,14 @@ class RecommendationEngine(object):
 
     def recommendRegion(self, region: Region):
         """Do this for each region..."""
-        
+
         region.dh.simulate()
-        #   for (increment n_thousand_votes):
-        #       for recommendation in {SNP, LibDem, CUK, Green}:
-        #           remove n_thousand_votes proportionally
-        #           add n_thousand_votes to recommendation
-        #           dhondt_after = calculate_dhondt
-        #           if (dhondt_after > dhondt_before)
-        #               return {dhondt_before, recommendation, n_thousand_votes, dhondt_after}
-        #           else
-        #               reset dhondt_after
+# for (increment n_thousand_votes):
+#     for recommendation in {SNP, LibDem, CUK, Green}:
+#         remove n_thousand_votes proportionally
+#         add n_thousand_votes to recommendation
+#         dhondt_after = calculate_dhondt
+#         if (dhondt_after > dhondt_before)
+#             return {dh_before, recommendation, n_thousand_votes, dh_after}
+#         else
+#             reset dhondt_after
