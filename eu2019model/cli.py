@@ -22,7 +22,7 @@ def main(args=None):
 
     # Simulate!
     dh.simulate()
-    
+
     click.echo("See click documentation at http://click.pocoo.org/")
     return 0
 
