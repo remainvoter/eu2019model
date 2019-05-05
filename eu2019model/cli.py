@@ -16,8 +16,17 @@ def main(args=None):
     db = DatabaseHelper()
     engine = RecommendationEngine()
 
+    recs = dict()
     for region in db.getAllRegions():
-        engine.recommendRegion(region)
+
+        print(f"Simulating for {region.name}...")
+        rec = engine.recommendRegion(region)
+
+        recs[region] = rec
+
+        if rec is not None:
+            before, region, votes_to_add, party = rec
+            print(f"Recommendation for {region.name} is {party.name}")
 
     return 0
 

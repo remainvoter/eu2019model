@@ -59,6 +59,3 @@ class Dhondt(object):
             if self.verbose:
                 print("------")
                 print("")
-
-        # Print results:
-        [print(party) for party in self.parties]

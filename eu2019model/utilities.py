@@ -1,7 +1,8 @@
 import sqlite3
 from typing import List
 
-from .eu2019model import Region, Party
+from .eu2019model import Region, Party, VoteIntention
+from .constants import recommended_parties, main_parties
 
 
 class DatabaseHelper(object):
@@ -34,9 +35,41 @@ class DatabaseHelper(object):
         q = f"SELECT party,percentage FROM projection WHERE region = '{name}'"
         self.cur.execute(q)
         for party, percentage in self.cur.fetchall():
-            parties.append(Party(party, percentage*(pop*turnout/100)))
+            party_name = party
+            if party_name == 'SNP/Plaid Cymru':
+                if name == 'Scotland':
+                    party_name = 'SNP'
+                elif name == 'Wales':
+                    party_name = 'Plaid Cymru'
 
-        return Region(name, parties, seats)
+            pro_eu = party_name in recommended_parties
+            main = party_name in main_parties
+
+            parties.append(Party(
+                party, percentage*(pop*turnout/100),
+                pro_eu, main))
+
+        return Region(name, parties, seats, pop, turnout)
+
+    def getIntendedVotes(self, voted_party: Party) -> List[VoteIntention]:
+
+        party_name = voted_party.name
+        if party_name in ['SNP', 'Plaid Cymru']:
+            party_name = 'SNP/Plaid Cymru'
+
+        q = (f"SELECT intended_party,percentage FROM intention "
+             f"WHERE voted_party = '{party_name}'")
+
+        self.cur.execute(q)
+
+        intentions = []
+        for intended_party, percentage in self.cur.fetchall():
+            intentions.append(VoteIntention(
+                intended_party,
+                voted_party.name,
+                percentage))
+
+        return intentions
 
     def getAllRegions(self) -> List[Region]:
 
