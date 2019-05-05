@@ -250,8 +250,6 @@ class RecommendationEngine(object):
                 # before.compare(region)
                 print(f"Votes to go remain: {region.seatsToRemain()}")
 
-                print("----")
-
                 if region.isRemain():
                     return (
                         before.copy(),
