@@ -1,4 +1,6 @@
 import sqlite3
+from typing import List
+
 from .eu2019model import Region, Party
 
 
@@ -9,10 +11,19 @@ class DatabaseHelper(object):
         self.conn.text_factory = str
         self.cur = self.conn.cursor()
 
-    def getRegion(self, postcode: str) -> Region:
+    def getRegionName(self, postcode: str) -> str:
         postcode = postcode.replace(' ', '').upper()
-        q = (f"SELECT * FROM regions WHERE eu_region = (SELECT eu_region "
-             f"FROM postcodes WHERE postcode = '{postcode}')")
+        q = f"SELECT eu_region FROM postcodes WHERE postcode = '{postcode}'"
+        self.cur.execute(q)
+        return self.cur.fetchall()[0][0]
+
+    def getRegionFromPostcode(self, postcode: str) -> Region:
+        name = self.getRegionName(postcode)
+        return self.getRegion(name)
+
+    def getRegion(self, name) -> Region:
+
+        q = (f"SELECT * FROM regions WHERE eu_region = '{name}'")
         self.cur.execute(q)
 
         # Region info:
@@ -26,3 +37,18 @@ class DatabaseHelper(object):
             parties.append(Party(party, percentage*(pop*turnout/100)))
 
         return Region(name, parties, seats)
+
+    def getAllRegions(self) -> List[Region]:
+
+        q = "SELECT eu_region FROM regions"
+        self.cur.execute(q)
+
+        regions = []
+
+        for name, in self.cur.fetchall():
+            print(name)
+            if name == 'Northern Ireland':
+                continue
+            regions.append(self.getRegion(name))
+
+        return regions

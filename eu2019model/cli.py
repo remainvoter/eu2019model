@@ -6,6 +6,7 @@ import click
 
 # from .dhondt import Dhondt, Party
 from .utilities import DatabaseHelper
+from .eu2019model import RecommendationEngine
 
 
 @click.command()
@@ -13,21 +14,10 @@ def main(args=None):
     """Console script for eu2019model."""
 
     db = DatabaseHelper()
-    r = db.getRegion('NE29 6Ta')
+    engine = RecommendationEngine()
 
-    print(r)
-
-    # # Create a vote:
-    # dh = Dhondt(8)
-
-    # # Create some parties:
-    # dh.addParty(Party('C', 30000))
-    # dh.addParty(Party('B', 80000))
-    # dh.addParty(Party('A', 100000))
-    # dh.addParty(Party('D', 20000))
-
-    # # Simulate!
-    # dh.simulate()
+    for region in db.getAllRegions():
+        engine.recommendRegion(region)
 
     return 0
 

@@ -5,9 +5,10 @@ from .eu2019model import Party
 
 class Dhondt(object):
 
-    def __init__(self, nSeats: int):
+    def __init__(self, nSeats: int, verbose: bool = False):
         self.numOfSeats: int = nSeats
         self.parties: List[Party] = []
+        self.verbose = verbose
 
     def addParty(self, party: Party):
         self.parties.append(party)
@@ -46,10 +47,18 @@ class Dhondt(object):
                 winner = self.parties[0]
 
             winner.addSeat()
-            print(f"Round {s+1}: Party {winner.name} wins!")
+
+            if self.verbose:
+                print(f"Round {s+1}: Party {winner.name} wins!")
 
             for party in self.parties:
                 party.updateScore()
-                print(party)
-            print("------")
-            print("")
+                if self.verbose:
+                    print(party)
+
+            if self.verbose:
+                print("------")
+                print("")
+
+        # Print results:
+        [print(party) for party in self.parties]

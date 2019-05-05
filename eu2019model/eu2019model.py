@@ -23,8 +23,8 @@ class Party(object):
         self.score = self.votes/(self.seats+1)
 
     def __str__(self):
-        return (f"Party {self.name} | "
-                f"Score: {self.score:0.0f} | "
+        return (f"{self.name:<16} | "
+                f"Score: {self.score:9.0f} | "
                 f"Seats: {self.seats}")
 
 
@@ -34,6 +34,7 @@ class Region(object):
         from .dhondt import Dhondt
         self.dh = Dhondt(numOfSeats)
         self.dh.addParties(parties)
+        self.name = name
 
 
 class Projection(object):
@@ -44,13 +45,15 @@ class Projection(object):
 
 class RecommendationEngine(object):
 
-    def __init__(self, voteIncrement: int = 1000):
+    def __init__(self, voteIncrement: int = 10000):
         self.voteIncrement = voteIncrement
 
     def recommendRegion(self, region: Region):
         """Do this for each region..."""
 
+        print(f"Initial simulation for {region.name}")
         region.dh.simulate()
+        print("-------")
 # for (increment n_thousand_votes):
 #     for recommendation in {SNP, LibDem, CUK, Green}:
 #         remove n_thousand_votes proportionally
