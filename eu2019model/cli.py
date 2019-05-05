@@ -4,30 +4,30 @@
 import sys
 import click
 
-from .dhondt import Dhondt, Party
-from .utilities import PostCode, loadProjections
+# from .dhondt import Dhondt, Party
+from .utilities import DatabaseHelper
 
 
 @click.command()
 def main(args=None):
     """Console script for eu2019model."""
 
-    loadProjections()
+    db = DatabaseHelper()
+    r = db.getRegion('NE29 6Ta')
 
-    pc = PostCode('Ne29 6tA')
-    print(pc.getRegion())
+    print(r)
 
-    # Create a vote:
-    dh = Dhondt(8)
+    # # Create a vote:
+    # dh = Dhondt(8)
 
-    # Create some parties:
-    dh.addParty(Party('C', 30000))
-    dh.addParty(Party('B', 80000))
-    dh.addParty(Party('A', 100000))
-    dh.addParty(Party('D', 20000))
+    # # Create some parties:
+    # dh.addParty(Party('C', 30000))
+    # dh.addParty(Party('B', 80000))
+    # dh.addParty(Party('A', 100000))
+    # dh.addParty(Party('D', 20000))
 
-    # Simulate!
-    dh.simulate()
+    # # Simulate!
+    # dh.simulate()
 
     return 0
 
