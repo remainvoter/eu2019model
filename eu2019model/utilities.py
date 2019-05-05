@@ -1,14 +1,54 @@
 import sqlite3
 from typing import List
+import os
+import requests
 
 from .eu2019model import Region, Party, VoteIntention
 from .constants import recommended_parties, main_parties
 
 
+def download_file_from_google_drive(id, destination):
+    URL = "https://docs.google.com/uc?export=download"
+
+    session = requests.Session()
+
+    response = session.get(URL, params={'id': id}, stream=True)
+    token = get_confirm_token(response)
+
+    if token:
+        params = {'id': id, 'confirm': token}
+        response = session.get(URL, params=params, stream=True)
+
+    save_response_content(response, destination)
+
+
+def get_confirm_token(response):
+    for key, value in response.cookies.items():
+        if key.startswith('download_warning'):
+            return value
+
+    return None
+
+
+def save_response_content(response, destination):
+    CHUNK_SIZE = 32768
+
+    with open(destination, "wb") as f:
+        for chunk in response.iter_content(CHUNK_SIZE):
+            if chunk:  # filter out keep-alive new chunks
+                f.write(chunk)
+
+
 class DatabaseHelper(object):
 
     def __init__(self):
-        self.conn = sqlite3.connect('data/recommend_engine.db')
+
+        db_file = 'data/recommend_engine.db'
+        if not os.path.isfile(db_file):
+            id = '1QVnMwm3934wQFkZZf7r-tAPds-kKhFdo'
+            download_file_from_google_drive(id, db_file)
+
+        self.conn = sqlite3.connect(db_file)
         self.conn.text_factory = str
         self.cur = self.conn.cursor()
 
