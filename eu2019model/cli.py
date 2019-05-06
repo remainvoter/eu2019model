@@ -15,18 +15,12 @@ def main(args=None):
 
     db = DatabaseHelper()
     engine = RecommendationEngine()
-
-    recs = dict()
     for region in db.getAllRegions():
-
-        print(f"Simulating for {region.name}...")
-        rec = engine.recommendRegion(region)
-
-        recs[region] = rec
-
-        if rec is not None:
-            before, region, votes_to_add, party = rec
-            print(f"Recommendation for {region.name} is {party.name}")
+        if region.name == 'East Midlands':
+            rec = engine.recommendRegion(region)
+            if rec is not None:
+                before, after, votes_taken, party = rec
+                engine.print(before, after, party, votes_taken)
 
     return 0
 

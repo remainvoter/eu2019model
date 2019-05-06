@@ -86,7 +86,7 @@ class DatabaseHelper(object):
             main = party_name in main_parties
 
             parties.append(Party(
-                party, percentage*(pop*turnout/100),
+                party, percentage*(pop*turnout/100)/100,
                 pro_eu, main))
 
         return Region(name, parties, seats, pop, turnout)
@@ -119,7 +119,6 @@ class DatabaseHelper(object):
         regions = []
 
         for name, in self.cur.fetchall():
-            print(name)
             if name == 'Northern Ireland':
                 continue
             regions.append(self.getRegion(name))

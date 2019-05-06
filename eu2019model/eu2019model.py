@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
-from typing import List
+from typing import List, Tuple
 import copy
+import math
 
 
 class Party(object):
 
-    def __init__(self, name: str, votes: int, proEU: bool, main: bool):
+    def __init__(self, name: str, votes: int, proEU: bool,
+                 main: bool, seats: int = 0):
         self.name: str = name
         self.votes: int = votes
-        self.seats: int = 0
+        self.seats: int = seats
         self.score: float = float(votes)
         self.proEU: bool = proEU
         self.main: bool = main
@@ -18,7 +20,8 @@ class Party(object):
             str(self.name),
             int(self.votes),
             bool(self.proEU),
-            bool(self.main))
+            bool(self.main),
+            int(self.seats))
 
     def addSeat(self):
         self.seats += 1
@@ -81,7 +84,8 @@ class Region(object):
         for p in self.dh.parties:
             ind = other.getPartyIndex(p.name)
             pother = other.dh.parties[ind]
-            print(f"{p.name:<17} vote diff: {pother.votes-p.votes}")
+            print((f"{p.name:<17} vote diff: "
+                   f"{math.floor(pother.votes-p.votes):0.0f}"))
 
     def redistributeVotes(self, voteIncrement: int, redist_party: Party):
         from .utilities import DatabaseHelper
@@ -178,6 +182,8 @@ class Region(object):
         if self.dh.verbose:
             print(f"Added {votes_taken} to {redist_party.name}")
 
+        return votes_taken
+
     def simulate(self):
         self.dh.simulate()
         self.computed = True
@@ -191,8 +197,7 @@ class Region(object):
     def isRemain(self):
         return self.seatsToRemain() < 0
 
-    def seatsToRemain(self):
-
+    def getSeatSplit(self) -> Tuple[int]:
         leave = 0
         remain = 0
         for p in self.dh.parties:
@@ -201,7 +206,20 @@ class Region(object):
             else:
                 leave += p.seats
 
+        return leave, remain
+
+    def getRemainSeats(self):
+        return self.getSeatSplit()[1]
+
+    def seatsToRemain(self):
+
+        leave, remain = self.getSeatSplit()
         return leave - remain
+
+    def moreRamainSeats(self, other):
+        remain = self.getSeatSplit()[1]
+        other_remain = other.getSeatSplit()[1]
+        return remain > other_remain
 
 
 class VoteIntention(object):
@@ -216,45 +234,71 @@ class VoteIntention(object):
 
 class RecommendationEngine(object):
 
-    def __init__(self, voteIncrement: int = 50000):
+    def __init__(self, voteIncrement: int = 10000):
         self.voteIncrement = voteIncrement
 
-    def recommendRegion(self, region: Region):
+    def printParties(self, region: Region):
+        party_list = [p.copy() for p in region.dh.parties]
+        [print(p) for p in party_list]
+
+    def print(self, before: Region, after: Region,
+              rec_party: Party, votes: int):
+        before_parties = before.dh.parties
+        before_parties.sort(key=lambda p: p.name)
+
+        after_parties = after.dh.parties
+        after_parties.sort(key=lambda p: p.name)
+
+        print_line = []
+
+        print_line.append(f"{before.name}")
+        print_line.append(''.join([str(p.seats) for p in before_parties]))
+        print_line.append(f"{rec_party.name}")
+        print_line.append(f"{math.floor(votes):0.0f}")
+        print_line.append(''.join([str(p.seats) for p in after_parties]))
+
+        print(','.join(print_line))
+
+    def recommendRegion(self, region: Region, max_iters: int = 500):
         """Do this for each region..."""
 
         if region.isRemain():
             return None
 
+        if region.dh.verbose:
+            print(f"Initial simulation for {region.name}")
+        region.simulate()
         before = region.copy()
+
         votes_to_add = 0
-        for i in range(200):  # Incrememnt loop
+        for i in range(max_iters):  # Incrememnt loop
             votes_to_add += self.voteIncrement
             party_list = copy.deepcopy(region.dh.parties)
             for party in party_list:
                 if not party.proEU:
                     continue
 
-                if region.dh.verbose:
-                    print(f"Initial simulation for {region.name}")
-                region.simulate()
+                self.printParties(region)
+                votes_added = region.redistributeVotes(votes_to_add, party)
 
-                if region.dh.verbose:
-                    print(f"Moving {votes_to_add} votes to {party.name}")
-                region.redistributeVotes(votes_to_add, party)
+                print(f"Added {votes_added:0.0f} votes to {party.name}")
 
                 if region.dh.verbose:
                     print(f"Resimulating:")
                 region.reset()
                 region.simulate()
 
-                # before.compare(region)
-                print(f"Votes to go remain: {region.seatsToRemain()}")
+                before.compare(region)
+                self.print(before.copy(), region.copy(), party, votes_added)
 
-                if region.isRemain():
+                print("---")
+
+                # Should we recommend?
+                if region.moreRamainSeats(before):
                     return (
                         before.copy(),
                         region.copy(),
-                        votes_to_add,
+                        votes_added,
                         party.copy())
                 else:
                     region = before.copy()
