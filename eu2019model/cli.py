@@ -16,11 +16,10 @@ def main(args=None):
     db = DatabaseHelper()
     engine = RecommendationEngine()
     for region in db.getAllRegions():
-        if region.name == 'East Midlands':
-            rec = engine.recommendRegion(region)
-            if rec is not None:
-                before, after, votes_taken, party = rec
-                engine.print(before, after, party, votes_taken)
+        rec = engine.recommendRegion(region)
+        if rec is not None:
+            before, after, votes_taken, party = rec
+            engine.print(before, after, party, votes_taken)
 
     return 0
 

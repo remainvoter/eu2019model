@@ -42,7 +42,7 @@ class Party(object):
                 f"Seats: {self.seats}")
 
     def isSNPorPlaid(self):
-        return self.name in ['Plaid Cymru', 'SNP']
+        return self.name in ['Plaid Cymru', 'SNP', 'SNP/Plaid Cymru']
 
     def equal(self, party_name: str):
         if self.isSNPorPlaid() and party_name == 'SNP/Plaid Cymru':
@@ -75,6 +75,9 @@ class Region(object):
             int(self.dh.numOfSeats),
             int(self.population),
             float(self.turnout))
+
+    def isScotlandOrWales(self):
+        return self.name in ['Scotland', 'Wales']
 
     def reset(self):
         for p in self.dh.parties:
@@ -109,6 +112,9 @@ class Region(object):
             for intent in intentions:
                 if party.equal(intent.intended):
                     break
+
+            if party.isSNPorPlaid() and not self.isScotlandOrWales():
+                continue
 
             if not party.main:
                 other_percentates += intent.percentage/100
@@ -151,6 +157,9 @@ class Region(object):
             for intent in intentions:
                 if party.equal(intent.intended):
                     break
+
+            if party.isSNPorPlaid() and not self.isScotlandOrWales():
+                continue
 
             percent_to_remove = (intent.percentage/100)/other_percentates
             percent_check += percent_to_remove
@@ -278,20 +287,18 @@ class RecommendationEngine(object):
                 if not party.proEU:
                     continue
 
-                self.printParties(region)
+                # self.printParties(region)
                 votes_added = region.redistributeVotes(votes_to_add, party)
 
-                print(f"Added {votes_added:0.0f} votes to {party.name}")
+                # print(f"Added {votes_added:0.0f} votes to {party.name}")
 
                 if region.dh.verbose:
                     print(f"Resimulating:")
                 region.reset()
                 region.simulate()
 
-                before.compare(region)
-                self.print(before.copy(), region.copy(), party, votes_added)
-
-                print("---")
+                # before.compare(region)
+                # self.print(before.copy(), region.copy(), party, votes_added)
 
                 # Should we recommend?
                 if region.moreRamainSeats(before):
