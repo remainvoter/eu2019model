@@ -40,7 +40,7 @@ Orderd by: Region, Pre-Dhondt, Recommendation, Votes, Post-Dhondt
 * Documentation: https://eu2019model.readthedocs.io.
 
 
-Features
+To Do
 --------
 
 * Use input files directly from GitHub
