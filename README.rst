@@ -45,6 +45,8 @@ To Do
 
 * Use input files directly from GitHub
 * Drop postcode support
+* Fix travis-CI
+* Dploy to PyPi
 * Improve model!
 
 Credits
