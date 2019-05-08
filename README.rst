@@ -22,17 +22,16 @@ The current model output looks like this:
 
 .. code-block::
 
-    East Midlands,301120000,Change UK,130000,321010000
-    East of England,311020000,Change UK,150000,321010000
-    London,211121000,Change UK,470000,141020000
-    North East,100020000,Change UK,50000,110010000
-    North West,300140000,Green,150000,200240000
-    Scotland,100010040,Green,30000,100100040
-    South East,412111000,Change UK,80000,421111000
-    South West,301110000,Liberal Democrat,10000,201111000
-    Wales,200020000,Green,50000,100120000
-    West Midlands,302020000,Change UK,20000,311020000
-    Yorkshire and The Humber,301020000,Green,20000,300120000
+    East Midlands,301120000,Change UK,123500,321010000
+    East of England,311020000,Change UK,142000,321010000
+    North East,100020000,Change UK,49000,110010000
+    North West,300140000,Green,146500,200240000
+    Scotland,100010040,Green,27000,100100040
+    South East,412111000,Change UK,70500,421111000
+    South West,301110000,Liberal Democrat,500,201111000
+    Wales,200020000,SNP/Plaid Cymru,11000,100020010
+    West Midlands,302020000,Change UK,14000,311020000
+    Yorkshire and The Humber,301020000,Green,13000,300120000
 
 Orderd by: Region, Pre-Dhondt, Recommendation, Votes, Post-Dhondt
 
