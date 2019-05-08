@@ -1,0 +1,52 @@
+===============================================================================
+EXTENSION NAME : linecount
+EXTENSION VERSION : 0.1.7
+-------------------------------------------------------------------------------
+count time : 2019-05-08 23:01:17
+count workspace : /home/drnick/dev/eu2019model
+total files : 40
+total code lines : 1410
+total comment lines : 168
+total blank lines : 427
+
+.editorconfig, code is 16, comment is 1, blank is 5.
+.github/ISSUE_TEMPLATE.md, code is 11, comment is 0, blank is 4.
+.gitignore, code is 84, comment is 0, blank is 23.
+.travis.yml, code is 15, comment is 0, blank is 0.
+AUTHORS.rst, code is 9, comment is 0, blank is 4.
+CONTRIBUTING.rst, code is 72, comment is 3, blank is 36.
+data/recommend_engine.db, it is a binary file.
+docs/authors.rst, code is 1, comment is 0, blank is 0.
+docs/conf.py, code is 40, comment is 85, blank is 38.
+docs/contributing.rst, code is 1, comment is 0, blank is 0.
+docs/history.rst, code is 1, comment is 0, blank is 0.
+docs/index.rst, code is 1, comment is 0, blank is 0.
+docs/installation.rst, code is 11, comment is 0, blank is 8.
+docs/make.bat, code is 19, comment is 0, blank is 5.
+docs/Makefile, code is 16, comment is 0, blank is 4.
+docs/readme.rst, code is 1, comment is 0, blank is 0.
+docs/usage.rst, code is 5, comment is 0, blank is 2.
+eu2019model/__init__.py, code is 3, comment is 1, blank is 3.
+eu2019model/__pycache__/__init__.cpython-36.pyc, it is a binary file.
+eu2019model/__pycache__/cli.cpython-36.pyc, it is a binary file.
+eu2019model/__pycache__/constants.cpython-36.pyc, it is a binary file.
+eu2019model/__pycache__/dhondt.cpython-36.pyc, it is a binary file.
+eu2019model/__pycache__/eu2019model.cpython-36.pyc, it is a binary file.
+eu2019model/__pycache__/utilities.cpython-36.pyc, it is a binary file.
+eu2019model/cli.py, code is 16, comment is 3, blank is 11.
+eu2019model/constants.py, code is 3, comment is 0, blank is 1.
+eu2019model/dhondt.py, code is 42, comment is 2, blank is 17.
+eu2019model/eu2019model.py, code is 214, comment is 21, blank is 82.
+eu2019model/utilities.py, code is 86, comment is 3, blank is 38.
+HISTORY.rst, code is 6, comment is 0, blank is 2.
+LICENSE, code is 17, comment is 0, blank is 5.
+Makefile, code is 62, comment is 11, blank is 18.
+MANIFEST.in, code is 9, comment is 0, blank is 2.
+Pipfile, code is 19, comment is 0, blank is 2.
+Pipfile.lock, code is 526, comment is 0, blank is 67.
+README.rst, code is 22, comment is 10, blank is 16.
+setup.cfg, code is 19, comment is 18, blank is 6.
+setup.py, code is 39, comment is 1, blank is 10.
+tests/test_eu2019model.py, code is 10, comment is 9, blank is 13.
+tox.ini, code is 14, comment is 0, blank is 5.
+===============================================================================

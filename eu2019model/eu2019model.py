@@ -11,7 +11,7 @@ class Party(object):
         self.name: str = name
         self.votes: int = votes
         self.seats: int = seats
-        self.score: float = float(votes)
+        self.score: int = votes
         self.proEU: bool = proEU
         self.main: bool = main
 
@@ -34,7 +34,7 @@ class Party(object):
         self.votes += additionalVotes
 
     def updateScore(self):
-        self.score = self.votes/(self.seats+1)
+        self.score = self.votes/math.floor(self.seats+1)
 
     def __str__(self):
         return (f"{self.name:<16} | "
@@ -285,6 +285,9 @@ class RecommendationEngine(object):
             party_list = copy.deepcopy(region.dh.parties)
             for party in party_list:
                 if not party.proEU:
+                    continue
+
+                if party.isSNPorPlaid() and not region.isScotlandOrWales():
                     continue
 
                 # self.printParties(region)
