@@ -91,22 +91,22 @@ class DatabaseHelper(object):
 
         return Region(name, parties, seats, pop, turnout)
 
-    def getIntendedVotes(self, voted_party: Party) -> List[VoteIntention]:
+    def getIntendedVotes(self, intended_party: Party) -> List[VoteIntention]:
 
-        party_name = voted_party.name
+        party_name = intended_party.name
         if party_name in ['SNP', 'Plaid Cymru']:
             party_name = 'SNP/Plaid Cymru'
 
-        q = (f"SELECT intended_party,percentage FROM intention "
-             f"WHERE voted_party = '{party_name}'")
+        q = (f"SELECT voted_party,percentage FROM intention "
+             f"WHERE intended_party = '{party_name}'")
 
         self.cur.execute(q)
 
         intentions = []
-        for intended_party, percentage in self.cur.fetchall():
+        for voted_party, percentage in self.cur.fetchall():
             intentions.append(VoteIntention(
-                intended_party,
-                voted_party.name,
+                voted_party,
+                intended_party.name,
                 percentage))
 
         return intentions

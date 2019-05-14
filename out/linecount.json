@@ -259,6 +259,263 @@
                     "filename": "tox.ini"
                 }
             ]
+        },
+        {
+            "version": "0.1.7",
+            "counttime": "2019-05-10 00:11:54",
+            "filesum": 40,
+            "codesum": 1430,
+            "commentsum": 168,
+            "blanksum": 430,
+            "filelist": [
+                {
+                    "blank": 5,
+                    "code": 16,
+                    "comment": 1,
+                    "filename": ".editorconfig"
+                },
+                {
+                    "blank": 4,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": ".github/ISSUE_TEMPLATE.md"
+                },
+                {
+                    "blank": 23,
+                    "code": 84,
+                    "comment": 0,
+                    "filename": ".gitignore"
+                },
+                {
+                    "blank": 0,
+                    "code": 15,
+                    "comment": 0,
+                    "filename": ".travis.yml"
+                },
+                {
+                    "blank": 4,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": "AUTHORS.rst"
+                },
+                {
+                    "blank": 36,
+                    "code": 72,
+                    "comment": 3,
+                    "filename": "CONTRIBUTING.rst"
+                },
+                {
+                    "filename": "data/recommend_engine.db",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "docs/authors.rst"
+                },
+                {
+                    "blank": 38,
+                    "code": 40,
+                    "comment": 85,
+                    "filename": "docs/conf.py"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "docs/contributing.rst"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "docs/history.rst"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "docs/index.rst"
+                },
+                {
+                    "blank": 8,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "docs/installation.rst"
+                },
+                {
+                    "blank": 5,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "docs/make.bat"
+                },
+                {
+                    "blank": 4,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "docs/Makefile"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "docs/readme.rst"
+                },
+                {
+                    "blank": 2,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "docs/usage.rst"
+                },
+                {
+                    "blank": 3,
+                    "code": 3,
+                    "comment": 1,
+                    "filename": "eu2019model/__init__.py"
+                },
+                {
+                    "filename": "eu2019model/__pycache__/__init__.cpython-36.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "eu2019model/__pycache__/cli.cpython-36.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "eu2019model/__pycache__/constants.cpython-36.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "eu2019model/__pycache__/dhondt.cpython-36.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "eu2019model/__pycache__/eu2019model.cpython-36.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "eu2019model/__pycache__/utilities.cpython-36.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 11,
+                    "code": 18,
+                    "comment": 3,
+                    "filename": "eu2019model/cli.py"
+                },
+                {
+                    "blank": 1,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "eu2019model/constants.py"
+                },
+                {
+                    "blank": 17,
+                    "code": 42,
+                    "comment": 2,
+                    "filename": "eu2019model/dhondt.py"
+                },
+                {
+                    "blank": 82,
+                    "code": 214,
+                    "comment": 21,
+                    "filename": "eu2019model/eu2019model.py"
+                },
+                {
+                    "blank": 38,
+                    "code": 86,
+                    "comment": 3,
+                    "filename": "eu2019model/utilities.py"
+                },
+                {
+                    "blank": 2,
+                    "code": 6,
+                    "comment": 0,
+                    "filename": "HISTORY.rst"
+                },
+                {
+                    "blank": 5,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "LICENSE"
+                },
+                {
+                    "blank": 18,
+                    "code": 62,
+                    "comment": 11,
+                    "filename": "Makefile"
+                },
+                {
+                    "blank": 2,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": "MANIFEST.in"
+                },
+                {
+                    "blank": 2,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "Pipfile"
+                },
+                {
+                    "blank": 67,
+                    "code": 526,
+                    "comment": 0,
+                    "filename": "Pipfile.lock"
+                },
+                {
+                    "blank": 19,
+                    "code": 40,
+                    "comment": 10,
+                    "filename": "README.rst"
+                },
+                {
+                    "blank": 6,
+                    "code": 19,
+                    "comment": 18,
+                    "filename": "setup.cfg"
+                },
+                {
+                    "blank": 10,
+                    "code": 39,
+                    "comment": 1,
+                    "filename": "setup.py"
+                },
+                {
+                    "blank": 13,
+                    "code": 10,
+                    "comment": 9,
+                    "filename": "tests/test_eu2019model.py"
+                },
+                {
+                    "blank": 5,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "tox.ini"
+                }
+            ]
         }
     ]
 }

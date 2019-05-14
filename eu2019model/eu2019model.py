@@ -103,41 +103,39 @@ class Region(object):
         # remove propotionately
         other_percentates = 0
         perc_check = []
-        for party in self.dh.parties:
+        for intent in intentions:
 
-            if party.equal(redist_party.name):
+            rem_i = self.getPartyIndex(intent.intended)
+
+            if redist_party.equal(intent.intended):
                 continue
 
-            # Get the intended swing percentage
-            for intent in intentions:
-                if party.equal(intent.intended):
-                    break
+            if self.dh.parties[rem_i].main:
+                votesToRemove = votes_to_take*(intent.percentage/100)
+                currentVotes = self.dh.parties[rem_i].votes
 
-            if party.isSNPorPlaid() and not self.isScotlandOrWales():
-                continue
+                # Check if we have some votes to remove
+                if currentVotes == 0:
+                    continue
 
-            if not party.main:
+                # Make sure we don't go negative...
+                if (currentVotes - votesToRemove) < 0:
+                    votesToRemove = votesToRemove
+
+                # Remove the votes
+                self.dh.parties[rem_i].votes -= votesToRemove
+
+                # Keep track of how many votes have been removed
+                votes_taken += votesToRemove
+
+            else:
+
+                isSNPPlaid = self.dh.parties[rem_i].isSNPorPlaid()
+                if isSNPPlaid and not self.isScotlandOrWales():
+                    continue
+
                 other_percentates += intent.percentage/100
                 perc_check.append(intent.percentage/100)
-                continue
-
-            votesToRemove = votes_to_take*(intent.percentage/100)
-            party_index = self.getPartyIndex(intent.intended)
-            currentVotes = self.dh.parties[party_index].votes
-
-            # Check if we have some votes to remove
-            if currentVotes == 0:
-                continue
-
-            # Make sure we don't go negative...
-            if (currentVotes - votesToRemove) < 0:
-                votesToRemove = votesToRemove
-
-            # Remove the votes
-            self.dh.parties[party_index].votes -= votesToRemove
-
-            # Keep track of how many votes have been removed
-            votes_taken += votesToRemove
 
         if self.dh.verbose:
             print(f"Removed {votes_taken} from main parties")
@@ -147,39 +145,35 @@ class Region(object):
         if self.dh.verbose:
             print(f"Still need to remove {votes_from_others} votes")
 
-        percent_check = 0
-        for party in self.dh.parties:
+        for intent in intentions:
 
-            if party.main or party.equal(redist_party.name):
+            rem_i = self.getPartyIndex(intent.intended)
+
+            if redist_party.equal(intent.intended):
                 continue
 
-            # Get the intended swing percentage
-            for intent in intentions:
-                if party.equal(intent.intended):
-                    break
+            if not self.dh.parties[rem_i].main:
+                isSNPPlaid = self.dh.parties[rem_i].isSNPorPlaid()
+                if isSNPPlaid and not self.isScotlandOrWales():
+                    continue
 
-            if party.isSNPorPlaid() and not self.isScotlandOrWales():
-                continue
+                percent_to_remove = (intent.percentage/100)/other_percentates
+                votesToRemove = votes_from_others*(percent_to_remove)
+                currentVotes = self.dh.parties[rem_i].votes
 
-            percent_to_remove = (intent.percentage/100)/other_percentates
-            percent_check += percent_to_remove
-            votesToRemove = votes_from_others*(percent_to_remove)
-            party_index = self.getPartyIndex(intent.intended)
-            currentVotes = self.dh.parties[party_index].votes
+                # Check if we have some votes to remove
+                if currentVotes == 0:
+                    continue
 
-            # Check if we have some votes to remove
-            if currentVotes == 0:
-                continue
+                # Make sure we don't go negative...
+                if (currentVotes - votesToRemove) < 0:
+                    votesToRemove = votesToRemove
 
-            # Make sure we don't go negative...
-            if (currentVotes - votesToRemove) < 0:
-                votesToRemove = votesToRemove
+                # Remove the votes
+                self.dh.parties[rem_i].votes -= votesToRemove
 
-            # Remove the votes
-            self.dh.parties[party_index].votes -= votesToRemove
-
-            # Keep track of how many votes have been removed
-            votes_taken += votesToRemove
+                # Keep track of how many votes have been removed
+                votes_taken += votesToRemove
 
         if self.dh.verbose:
             print(f"Removed {votes_from_others} from other parties")
@@ -268,7 +262,7 @@ class RecommendationEngine(object):
 
         print(','.join(print_line))
 
-    def recommendRegion(self, region: Region, max_iters: int = 500):
+    def recommendRegion(self, region: Region, max_iters: int = 5000):
         """Do this for each region..."""
 
         if region.isRemain():
