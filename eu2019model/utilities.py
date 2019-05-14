@@ -62,13 +62,14 @@ class DatabaseHelper(object):
         name = self.getRegionName(postcode)
         return self.getRegion(name)
 
-    def getRegion(self, name) -> Region:
+    def getRegion(self, name, turnout_mod: int = 0) -> Region:
 
         q = (f"SELECT * FROM regions WHERE eu_region = '{name}'")
         self.cur.execute(q)
 
         # Region info:
         name, seats, pop, turnout = self.cur.fetchall()[0]
+        turnout += turnout_mod
 
         # Get a list of parties along with vote info
         parties = []
@@ -111,7 +112,7 @@ class DatabaseHelper(object):
 
         return intentions
 
-    def getAllRegions(self) -> List[Region]:
+    def getAllRegions(self, turnout_mod: int = 0) -> List[Region]:
 
         q = "SELECT eu_region FROM regions"
         self.cur.execute(q)
@@ -121,6 +122,6 @@ class DatabaseHelper(object):
         for name, in self.cur.fetchall():
             if name == 'Northern Ireland':
                 continue
-            regions.append(self.getRegion(name))
+            regions.append(self.getRegion(name, turnout_mod))
 
         return regions

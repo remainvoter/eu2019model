@@ -15,7 +15,8 @@ def main(args=None):
 
     db = DatabaseHelper()
     engine = RecommendationEngine()
-    for region in db.getAllRegions():
+    extra_turnout = 0
+    for region in db.getAllRegions(extra_turnout):
         rec = engine.recommendRegion(region)
         if rec is not None:
             before, after, votes_taken, party = rec
