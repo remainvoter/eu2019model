@@ -105,3 +105,6 @@ ENV/
 .mypy_cache/
 
 *.db
+data/A.csv
+data/B.csv
+data/C.csv

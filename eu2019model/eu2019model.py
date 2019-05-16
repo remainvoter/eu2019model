@@ -284,18 +284,12 @@ class RecommendationEngine(object):
                 if party.isSNPorPlaid() and not region.isScotlandOrWales():
                     continue
 
-                # self.printParties(region)
                 votes_added = region.redistributeVotes(votes_to_add, party)
-
-                # print(f"Added {votes_added:0.0f} votes to {party.name}")
 
                 if region.dh.verbose:
                     print(f"Resimulating:")
                 region.reset()
                 region.simulate()
-
-                # before.compare(region)
-                # self.print(before.copy(), region.copy(), party, votes_added)
 
                 # Should we recommend?
                 if region.moreRamainSeats(before):

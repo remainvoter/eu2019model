@@ -13,7 +13,7 @@ from .eu2019model import RecommendationEngine
 def main(args=None):
     """Console script for eu2019model."""
 
-    db = DatabaseHelper()
+    db = DatabaseHelper(True)
     engine = RecommendationEngine()
     extra_turnout = 0
     for region in db.getAllRegions(extra_turnout):
