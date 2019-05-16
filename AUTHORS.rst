@@ -2,6 +2,11 @@
 Credits
 =======
 
+Modelling Lead
+----------------
+
+* Cheryl Hung <>
+
 Development Lead
 ----------------
 
