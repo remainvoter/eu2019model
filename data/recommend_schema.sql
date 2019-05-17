@@ -42,5 +42,5 @@ INSERT INTO "regions" VALUES ('South East',10,6433337,36.5),
  ('London',8,6608033,33.3),
  ('South West',6,4062632,37.0),
  ('East of England',7,4385365,35.9),
- ('East Midlands',7,3375669,33.2);
+ ('East Midlands',5,3375669,33.2);
 COMMIT;
