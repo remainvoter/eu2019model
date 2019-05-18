@@ -1,11 +1,10 @@
-"""Tests for `eu2019model` package."""
+"""Tests for `remainvoter` package."""
 
 import pytest
 
 from click.testing import CliRunner
 
-# from eu2019model import eu2019model
-from eu2019model import cli
+from recommend import remainvoter
 
 
 @pytest.fixture
