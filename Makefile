@@ -77,7 +77,7 @@ servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 release: dist ## package and upload a release
-	twine upload dist/*
+	twine upload --skip-existing dist/*
 executable:
 	pyinstaller --name eu2019model eu2019model/recommend.py
 
