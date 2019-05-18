@@ -20,8 +20,7 @@ setup(
     author="Nicholas Martin",
     author_email='drnicholasdmartin@gmail.com',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         "Programming Language :: Python :: 3.7",
