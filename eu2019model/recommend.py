@@ -17,8 +17,7 @@ def main(args=None):
         rec = engine.recommendRegion(region)
         if rec is not None:
             before, after, votes_taken, party = rec
-            engine.print(before, after, party, votes_taken)
-            # output.append(engine.toDict(before, after, party, votes_taken))
+            output.append(engine.toDict(before, after, party, votes_taken))
 
     print(json.dumps(output))
 
