@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS "intention";
 CREATE TABLE IF NOT EXISTS "intention" (
 	"intended_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	"intended_party"	TEXT NOT NULL,
-	"voted_year"	INTEGER NOT NULL,
+	"region"	TEXT,
 	"voted_party"	TEXT NOT NULL,
 	"percentage"	REAL NOT NULL
 );
@@ -21,14 +21,6 @@ CREATE TABLE IF NOT EXISTS "regions" (
 	"population"	INTEGER NOT NULL,
 	"turnout"	REAL NOT NULL,
 	PRIMARY KEY("eu_region")
-);
-DROP TABLE IF EXISTS "postcodes";
-CREATE TABLE IF NOT EXISTS "postcodes" (
-	"postcode_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	"postcode"	TEXT NOT NULL UNIQUE,
-	"latitude"	REAL,
-	"longitude"	REAL,
-	"eu_region"	TEXT NOT NULL
 );
 DROP INDEX IF EXISTS "postcode_index";
 INSERT INTO "regions" VALUES ('South East',10,6433337,36.5),

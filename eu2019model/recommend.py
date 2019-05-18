@@ -10,8 +10,7 @@ def main(args=None):
 
     db = DatabaseHelper(True)
     engine = RecommendationEngine()
-    extra_turnout = 10
-    for region in db.getAllRegions(extra_turnout):
+    for region in db.getAllRegions():
         rec = engine.recommendRegion(region)
         if rec is not None:
             before, after, votes_taken, party = rec
@@ -28,8 +27,6 @@ def parseargs(args):
                         help="Generate recommentation for specific region")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Show more detailed output")
-    parser.add_argument("-t", "--turnout", type=int, default=0,
-                        help="increase turnout in all regions in percentage")
     parser.add_argument("-i", "--increment", type=int, default=10000,
                         help="vote increment for each iteration")
 

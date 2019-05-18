@@ -17,6 +17,7 @@ class DatabaseHelper(object):
         self.pathA = 'data/A.csv'
         self.pathB = 'data/B.csv'
         self.pathC = 'data/C.csv'
+        self.pathD = 'data/D'
 
         self.getConnection()
 
@@ -82,7 +83,10 @@ class DatabaseHelper(object):
 
         return intentions
 
-    def getAllRegions(self, turnout_mod: int = 0) -> List[Region]:
+    def getAllRegions(self) -> List[Region]:
+
+        with open('data/D') as f:
+            turnout_mod = int(f.read())
 
         q = "SELECT eu_region FROM regions"
         self.cur.execute(q)
@@ -119,18 +123,22 @@ class DatabaseHelper(object):
         urlA = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/A_expected_total_voters.csv'
         urlB = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/B_EU_2019_intentions.csv'
         urlC = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/C_voter_swings.csv'
+        urlD = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/D_increased_turnout_percentage'
 
         tokenA = 'AD4HAFLEN3FLZWBTTAEGMQ24433AO'
         tokenB = 'AD4HAFNDJCMIAM4PFST6GJK4434YW'
         tokenC = 'AD4HAFKRIN53DM3UANNX3G24434Z6'
+        tokenD = 'AL7PP3PYUFDUJWKPBCO2IZC45GQAQ'
 
         rA = requests.get(f'{urlA}?token={tokenA}', allow_redirects=True)
         rB = requests.get(f'{urlB}?token={tokenB}', allow_redirects=True)
         rC = requests.get(f'{urlC}?token={tokenC}', allow_redirects=True)
+        rD = requests.get(f'{urlD}?token={tokenD}', allow_redirects=True)
 
         open('data/A.csv', 'wb').write(rA.content)
         open('data/B.csv', 'wb').write(rB.content)
         open('data/C.csv', 'wb').write(rC.content)
+        open('data/D', 'wb').write(rD.content)
 
     def createDatabase(self):
         with open("data/recommend_schema.sql") as f:
@@ -142,7 +150,7 @@ class DatabaseHelper(object):
 
             voted_parties = []
             sql_base = ("INSERT INTO 'intention'('intended_party',"
-                        "'voted_year','voted_party','percentage') VALUES")
+                        "'region','voted_party','percentage') VALUES")
             values = []
             for line, row in enumerate(csv_reader):
                 for col, item in enumerate(row):
@@ -152,7 +160,7 @@ class DatabaseHelper(object):
                         int_party = item.replace('_', ' ')
                     elif line > 0 and col > 0:
                         values.append((f"('{int_party}',"
-                                       f"'2017',"
+                                       f"'North East',"
                                        f"'{voted_parties[col-1]}',"
                                        f"'{int(item)}')"))
 
