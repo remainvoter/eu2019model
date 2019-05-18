@@ -10,7 +10,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', ]
+requirements = ['requests==2.22.0']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -44,7 +44,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/DrNickMartin/eu2019model',
+    url='https://github.com/remainvoter/eu2019model',
     version='0.1.0',
     zip_safe=False,
 )

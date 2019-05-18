@@ -9,7 +9,7 @@
             "name": "CLI",
             "type": "python",
             "request": "launch",
-            "module": "eu2019model.cli"
+            "module": "eu2019model.recommend"
         }
     ]
 }

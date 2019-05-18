@@ -79,7 +79,7 @@ servedocs: docs ## compile the docs watching for changes
 release: dist ## package and upload a release
 	twine upload dist/*
 executable:
-	pyinstaller --name eu2019model eu2019model/cli.py
+	pyinstaller --name eu2019model eu2019model/recommend.py
 
 dist: clean ## builds source and wheel package
 	python setup.py sdist

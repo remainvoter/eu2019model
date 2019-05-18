@@ -1,6 +1,6 @@
 from typing import List
 
-from recommend.eu2019model import Party
+from .models import Party
 
 
 class Dhondt(object):

@@ -1,8 +1,8 @@
 import sys
 import argparse
 
-from recommend.eu2019model import RecommendationEngine
-from recommend.utilities import DatabaseHelper
+from .models import RecommendationEngine
+from .utilities import DatabaseHelper
 
 
 def main(args=None):
@@ -20,7 +20,7 @@ def main(args=None):
     return 0
 
 
-def parseargs():
+def parseargs(args):
     parser = argparse.ArgumentParser(
             description="Generate recommendations for the 2019 EU elections in England, Wales and Scotland"
         )
@@ -37,5 +37,5 @@ def parseargs():
 
 
 if __name__ == "__main__":
-    args = parseargs()
+    args = parseargs(sys.argv[1:])
     sys.exit(main(args))

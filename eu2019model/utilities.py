@@ -4,7 +4,7 @@ import os
 import requests
 import csv
 
-from .eu2019model import Region, Party, VoteIntention
+from .models import Region, Party, VoteIntention
 from .constants import recommended_parties, main_parties
 
 
