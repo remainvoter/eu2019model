@@ -6,8 +6,8 @@ eu2019model
 .. image:: https://img.shields.io/pypi/v/eu2019model.svg
         :target: https://pypi.python.org/pypi/eu2019model
 
-.. image:: https://img.shields.io/travis/DrNickMartin/eu2019model.svg
-        :target: https://travis-ci.org/DrNickMartin/eu2019model
+.. image:: https://travis-ci.org/remainvoter/eu2019model.svg?branch=master
+        :target: https://travis-ci.org/remainvoter/eu2019model
 
 .. image:: https://readthedocs.org/projects/eu2019model/badge/?version=latest
         :target: https://eu2019model.readthedocs.io/en/latest/?badge=latest
