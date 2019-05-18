@@ -19,6 +19,19 @@ class Dhondt(object):
     def addParties(self, parties: List[Party]):
         self.parties.extend(parties)
 
+    def toDict(self):
+
+        self.parties.sort(key=lambda p: p.order)
+
+        data = {}
+        for p in self.parties:
+            if p.seats == 0:
+                continue
+
+            data[p.name] = p.seats
+
+        return data
+
     def simulate(self):
 
         # Check we have some parties
@@ -47,6 +60,9 @@ class Dhondt(object):
                 winner = self.parties[0]
 
             winner.addSeat()
+
+            if winner.order == 100:
+                winner.order = s
 
             if self.verbose:
                 print(f"Round {s+1}: Party {winner.name} wins!")

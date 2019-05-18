@@ -18,23 +18,6 @@ eu2019model
 Model to be used as a recommendation engine for people wishing to vote
 remain in the EU 2019 elections in the UK
 
-The current model output looks like this:
-
-.. code-block::
-
-        East Midlands,301021000,Liberal Democrat,210000,301012000
-        East of England,311011000,Change UK,200000,221011000
-        London,100133000,Liberal Democrat,500000,100025000
-        North East,200010000,Liberal Democrat,50000,100011000
-        North West,200051000,Green,70000,200141000
-        Scotland,101011020,SNP/Plaid Cymru,20000,100011030
-        South East,312112000,Change UK,740000,242011000
-        South West,300012000,Liberal Democrat,260000,300003000
-        Wales,200020000,SNP/Plaid Cymru,60000,100020010
-        West Midlands,300130000,Change UK,90000,210130000
-        Yorkshire and The Humber,301020000,Liberal Democrat,50000,300021000
-
-Orderd by: Region, Pre-Dhondt, Recommendation, Votes, Post-Dhondt
 
 * Free software: MIT license
 * Documentation: https://eu2019model.readthedocs.io.
@@ -62,7 +45,7 @@ by completing the following:
 
 .. code-block::
 
-        pipenv run python -m recommend.remainvoter -h
+        pipenv run python -m eu2019model.recommend -h
 
 To Do
 --------

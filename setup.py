@@ -31,7 +31,7 @@ setup(
                  "elections in the UK"),
     entry_points={
         'console_scripts': [
-            'eu2019model=eu2019model.cli:main',
+            'eu2019model=eu2019model.recommend:main',
         ],
     },
     install_requires=requirements,

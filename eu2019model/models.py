@@ -7,13 +7,14 @@ import math
 class Party(object):
 
     def __init__(self, name: str, votes: int, proEU: bool,
-                 main: bool, seats: int = 0):
+                 main: bool, order: int = 100, seats: int = 0):
         self.name: str = name
         self.votes: int = votes
         self.seats: int = seats
         self.score: int = votes
         self.proEU: bool = proEU
         self.main: bool = main
+        self.order: int = order
 
     def copy(self):
         return Party(
@@ -21,6 +22,7 @@ class Party(object):
             int(self.votes),
             bool(self.proEU),
             bool(self.main),
+            int(self.order),
             int(self.seats))
 
     def addSeat(self):
@@ -42,13 +44,10 @@ class Party(object):
                 f"Seats: {self.seats}")
 
     def isSNPorPlaid(self):
-        return self.name in ['Plaid Cymru', 'SNP', 'SNP/Plaid Cymru']
+        return self.name in ['Plaid Cymru', 'SNP']
 
     def equal(self, party_name: str):
-        if self.isSNPorPlaid() and party_name == 'SNP/Plaid Cymru':
-            return True
-        else:
-            return party_name == self.name
+        return party_name.lower() == self.name.lower()
 
 
 class Region(object):
@@ -95,23 +94,18 @@ class Region(object):
         dbh = DatabaseHelper()
 
         votes_taken = 0
-        # votes_to_take = self.population*(self.turnout/100)
         votes_to_take = voteIncrement
-        intentions = dbh.getIntendedVotes(redist_party)
+        intentions = dbh.getIntendedVotes(redist_party, self)
 
-        # Loop over the three main parties and
-        # remove propotionately
-        other_percentates = 0
-        perc_check = []
         for intent in intentions:
 
-            rem_i = self.getPartyIndex(intent.intended)
+            rem_i = self.getPartyIndex(intent.swingFrom)
 
-            if redist_party.equal(intent.intended):
+            if redist_party.equal(intent.swingFrom):
                 continue
 
             if self.dh.parties[rem_i].main:
-                votesToRemove = votes_to_take*(intent.percentage/100)
+                votesToRemove = votes_to_take*(intent.percent/100)
                 currentVotes = self.dh.parties[rem_i].votes
 
                 # Check if we have some votes to remove
@@ -127,56 +121,9 @@ class Region(object):
 
                 # Keep track of how many votes have been removed
                 votes_taken += votesToRemove
-
-            else:
-
-                isSNPPlaid = self.dh.parties[rem_i].isSNPorPlaid()
-                if isSNPPlaid and not self.isScotlandOrWales():
-                    continue
-
-                other_percentates += intent.percentage/100
-                perc_check.append(intent.percentage/100)
 
         if self.dh.verbose:
             print(f"Removed {votes_taken} from main parties")
-
-        votes_from_others = votes_to_take - votes_taken
-
-        if self.dh.verbose:
-            print(f"Still need to remove {votes_from_others} votes")
-
-        for intent in intentions:
-
-            rem_i = self.getPartyIndex(intent.intended)
-
-            if redist_party.equal(intent.intended):
-                continue
-
-            if not self.dh.parties[rem_i].main:
-                isSNPPlaid = self.dh.parties[rem_i].isSNPorPlaid()
-                if isSNPPlaid and not self.isScotlandOrWales():
-                    continue
-
-                percent_to_remove = (intent.percentage/100)/other_percentates
-                votesToRemove = votes_from_others*(percent_to_remove)
-                currentVotes = self.dh.parties[rem_i].votes
-
-                # Check if we have some votes to remove
-                if currentVotes == 0:
-                    continue
-
-                # Make sure we don't go negative...
-                if (currentVotes - votesToRemove) < 0:
-                    votesToRemove = votesToRemove
-
-                # Remove the votes
-                self.dh.parties[rem_i].votes -= votesToRemove
-
-                # Keep track of how many votes have been removed
-                votes_taken += votesToRemove
-
-        if self.dh.verbose:
-            print(f"Removed {votes_from_others} from other parties")
 
         # Add those votes to the redistributing party
         redist_party_index = self.getPartyIndex(redist_party.name)
@@ -227,12 +174,12 @@ class Region(object):
 
 class VoteIntention(object):
 
-    def __init__(self, intended_party: str, voted_party: str,
-                 percentage: int):
+    def __init__(self, swingFrom: str, swingTo: str,
+                 percent: int):
 
-        self.intended: str = intended_party
-        self.voted: str = voted_party
-        self.percentage: int = percentage
+        self.swingFrom: str = swingFrom
+        self.swingTo: str = swingTo
+        self.percent: int = percent
 
 
 class RecommendationEngine(object):
@@ -244,13 +191,26 @@ class RecommendationEngine(object):
         party_list = [p.copy() for p in region.dh.parties]
         [print(p) for p in party_list]
 
+    def toDict(self, before: Region, after: Region,
+               rec_party: Party, votes: int):
+
+        data = {}
+
+        data["recommendation"] = rec_party.name
+        data["region"] = before.name
+        data["swing-votes"] = votes
+        data["pre-dhondt-seats"] = before.dh.toDict()
+        data["post-dhondt-seats"] = after.dh.toDict()
+
+        return data
+
     def print(self, before: Region, after: Region,
               rec_party: Party, votes: int):
         before_parties = before.dh.parties
-        before_parties.sort(key=lambda p: p.name)
+        before_parties.sort(key=lambda p: p.order)
 
         after_parties = after.dh.parties
-        after_parties.sort(key=lambda p: p.name)
+        after_parties.sort(key=lambda p: p.order)
 
         print_line = []
 

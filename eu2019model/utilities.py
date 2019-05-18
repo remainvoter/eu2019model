@@ -44,16 +44,10 @@ class DatabaseHelper(object):
 
         # Get a list of parties along with vote info
         parties = []
-        q = f"SELECT party,percentage FROM projection WHERE region = '{name}'"
+        q = f"SELECT party,percentage FROM projection WHERE lower(region) = '{name.lower()}'"
         self.cur.execute(q)
         for party, percentage in self.cur.fetchall():
             party_name = party
-            if party_name == 'SNP/Plaid Cymru':
-                if name == 'Scotland':
-                    party_name = 'SNP'
-                elif name == 'Wales':
-                    party_name = 'Plaid Cymru'
-
             pro_eu = party_name in recommended_parties
             main = party_name in main_parties
 
@@ -63,29 +57,26 @@ class DatabaseHelper(object):
 
         return Region(name, parties, seats, pop, turnout)
 
-    def getIntendedVotes(self, intended_party: Party) -> List[VoteIntention]:
+    def getIntendedVotes(self, redist_part: Party, region: Region) -> List[VoteIntention]:
 
-        party_name = intended_party.name
-        if party_name in ['SNP', 'Plaid Cymru']:
-            party_name = 'SNP/Plaid Cymru'
-
-        q = (f"SELECT voted_party,percentage FROM intention "
-             f"WHERE intended_party = '{party_name}'")
+        q = (f"SELECT swing_from,percent FROM intention "
+             f"WHERE swing_to = '{redist_part.name}'"
+             f"AND region = '{region.name}'")
 
         self.cur.execute(q)
 
         intentions = []
-        for voted_party, percentage in self.cur.fetchall():
+        for swingFrom, percent in self.cur.fetchall():
             intentions.append(VoteIntention(
-                voted_party,
-                intended_party.name,
-                percentage))
+                swingFrom,
+                redist_part.name,
+                percent))
 
         return intentions
 
     def getAllRegions(self) -> List[Region]:
 
-        with open('data/D') as f:
+        with open(self.pathD) as f:
             turnout_mod = int(f.read())
 
         q = "SELECT eu_region FROM regions"
@@ -94,8 +85,6 @@ class DatabaseHelper(object):
         regions = []
 
         for name, in self.cur.fetchall():
-            if name == 'Northern Ireland':
-                continue
             regions.append(self.getRegion(name, turnout_mod))
 
         return regions
@@ -119,6 +108,9 @@ class DatabaseHelper(object):
 
         if os.path.isfile(self.pathC):
             os.remove(self.pathC)
+
+        if os.path.isfile(self.pathD):
+            os.remove(self.pathD)
 
         urlA = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/A_expected_total_voters.csv'
         urlB = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/B_EU_2019_intentions.csv'
@@ -145,24 +137,19 @@ class DatabaseHelper(object):
             self.cur.executescript(' '.join(f.readlines()))
 
     def loadIntentions(self):
+
         with open(self.pathC) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
 
-            voted_parties = []
-            sql_base = ("INSERT INTO 'intention'('intended_party',"
-                        "'region','voted_party','percentage') VALUES")
+            sql_base = ("INSERT INTO 'intention'('region',"
+                        "'swing_to','swing_from','percent') VALUES")
             values = []
             for line, row in enumerate(csv_reader):
-                for col, item in enumerate(row):
-                    if line == 0 and col > 0:
-                        voted_parties.append(item.replace('_', ' '))
-                    elif line > 0 and col == 0:
-                        int_party = item.replace('_', ' ')
-                    elif line > 0 and col > 0:
-                        values.append((f"('{int_party}',"
-                                       f"'North East',"
-                                       f"'{voted_parties[col-1]}',"
-                                       f"'{int(item)}')"))
+                if line > 0:
+                    values.append((f"('{row[0].replace('_',' ')}',"
+                                   f"'{row[1].replace('_',' ')}',"
+                                   f"'{row[2].replace('_',' ')}',"
+                                   f"'{int(row[3])}')"))
 
             self.cur.execute("BEGIN TRANSACTION")
             q = f"{sql_base} {','.join(values)}"
@@ -181,14 +168,14 @@ class DatabaseHelper(object):
                 for i, item in enumerate(row):
                     if line_count == 0:
                         if i > 0:
-                            region_name = item.replace('_', ' ')
+                            region_name = item.replace('_', ' ').lstrip()
                             percentages[region_name] = []
                             region_names.append(region_name)
                     else:
                         if i == 0:
                             parties.append(item.replace('_', ' '))
                         else:
-                            percentages[region_names[i-1]].append(int(item))
+                            percentages[region_names[i-1]].append(float(item))
 
                 line_count += 1
 

@@ -8,11 +8,11 @@ CREATE TABLE IF NOT EXISTS "projection" (
 );
 DROP TABLE IF EXISTS "intention";
 CREATE TABLE IF NOT EXISTS "intention" (
-	"intended_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	"intended_party"	TEXT NOT NULL,
+	"id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	"swing_to"	TEXT NOT NULL,
 	"region"	TEXT,
-	"voted_party"	TEXT NOT NULL,
-	"percentage"	REAL NOT NULL
+	"swing_from"	TEXT NOT NULL,
+	"percent"	REAL NOT NULL
 );
 DROP TABLE IF EXISTS "regions";
 CREATE TABLE IF NOT EXISTS "regions" (
@@ -24,8 +24,7 @@ CREATE TABLE IF NOT EXISTS "regions" (
 );
 DROP INDEX IF EXISTS "postcode_index";
 INSERT INTO "regions" VALUES ('South East',10,6433337,36.5),
- ('Yorkshire and The Humber',6,3870749,33.5),
- ('Northern Ireland',3,1225771,51.89),
+ ('Yorkshire and the Humber',6,3870749,33.5),
  ('Wales',4,2327175,31.5),
  ('North East',3,1969747,30.9),
  ('North West',8,5237871,33.5),

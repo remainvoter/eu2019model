@@ -1,5 +1,6 @@
 import sys
 import argparse
+import json
 
 from .models import RecommendationEngine
 from .utilities import DatabaseHelper
@@ -10,11 +11,16 @@ def main(args=None):
 
     db = DatabaseHelper(True)
     engine = RecommendationEngine()
+    output = []
     for region in db.getAllRegions():
+
         rec = engine.recommendRegion(region)
         if rec is not None:
             before, after, votes_taken, party = rec
             engine.print(before, after, party, votes_taken)
+            # output.append(engine.toDict(before, after, party, votes_taken))
+
+    print(json.dumps(output))
 
     return 0
 
