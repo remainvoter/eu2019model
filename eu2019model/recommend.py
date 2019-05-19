@@ -3,26 +3,32 @@ import argparse
 import json
 
 from .models import RecommendationEngine
-from .utilities import DatabaseHelper
 
 
 def main(args=None):
     """Console script for eu2019model."""
 
-    db = DatabaseHelper(args.update)
-    engine = RecommendationEngine(args.increment)
-    output = []
-    for region in db.getAllRegions():
+    if args is None:
+        update = True
+        increment = 10000
+        output = False
+    else:
+        update = True
+        increment = args.increment
+        output = args.output
 
+    data = []
+    engine = RecommendationEngine(increment, update)
+    for region in engine.getAllRegions():
         rec = engine.recommendRegion(region)
         if rec is not None:
             before, after, votes_taken, party = rec
-            output.append(engine.toDict(before, after, party, votes_taken))
+            data.append(engine.toDict(before, after, party, votes_taken))
 
-    if args.output:
-        with open('data/recommend.json', 'w') as outfile:  
-            json.dump(output, outfile)
-    json.dumps(output)
+    if output:
+        with open('data/recommend.json', 'w') as outfile:
+            json.dump(data, outfile)
+    print(json.dumps(data))
 
     return 0
 

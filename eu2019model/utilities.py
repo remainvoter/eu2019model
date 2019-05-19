@@ -15,10 +15,10 @@ class DatabaseHelper(object):
         self.recreate = recreate
 
         if recreate:
-            self.db_file = 'https://dbhub.io/DrNickMartin/recommend_engine.db'
-        else:
             self.db_file = 'data/recommend_engine.db'
-        
+        else:
+            self.db_file = 'https://dbhub.io/DrNickMartin/recommend_engine.db'
+            
         self.pathA = 'data/A.csv'
         self.pathB = 'data/B.csv'
         self.pathC = 'data/C.csv'
@@ -99,7 +99,7 @@ class DatabaseHelper(object):
         if self.recreate and os.path.isfile(self.db_file):
             os.remove(self.db_file)
 
-        conn = sqlite3.connect(self.db_file)
+        conn = sqlite3.connect(self.db_file, uri=True)
         conn.text_factory = str
         self.cur = conn.cursor()
 

@@ -89,9 +89,7 @@ class Region(object):
             print((f"{p.name:<17} vote diff: "
                    f"{math.floor(pother.votes-p.votes):0.0f}"))
 
-    def redistributeVotes(self, voteIncrement: int, redist_party: Party):
-        from .utilities import DatabaseHelper
-        dbh = DatabaseHelper()
+    def redistributeVotes(self, voteIncrement: int, redist_party: Party, dbh):
 
         votes_taken = 0
         votes_to_take = voteIncrement
@@ -184,12 +182,17 @@ class VoteIntention(object):
 
 class RecommendationEngine(object):
 
-    def __init__(self, voteIncrement: int = 10000):
+    def __init__(self, voteIncrement: int = 10000, update: bool = True):
+        from .utilities import DatabaseHelper
         self.voteIncrement = voteIncrement
+        self.dbh = DatabaseHelper(update)
 
     def printParties(self, region: Region):
         party_list = [p.copy() for p in region.dh.parties]
         [print(p) for p in party_list]
+
+    def getAllRegions(self):
+        return self.dbh.getAllRegions()
 
     def toDict(self, before: Region, after: Region,
                rec_party: Party, votes: int):
@@ -244,7 +247,7 @@ class RecommendationEngine(object):
                 if party.isSNPorPlaid() and not region.isScotlandOrWales():
                     continue
 
-                votes_added = region.redistributeVotes(votes_to_add, party)
+                votes_added = region.redistributeVotes(votes_to_add, party, self.dbh)
 
                 if region.dh.verbose:
                     print(f"Resimulating:")
