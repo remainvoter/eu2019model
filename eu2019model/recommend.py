@@ -9,8 +9,8 @@ from .utilities import DatabaseHelper
 def main(args=None):
     """Console script for eu2019model."""
 
-    db = DatabaseHelper(True)
-    engine = RecommendationEngine()
+    db = DatabaseHelper(args.update)
+    engine = RecommendationEngine(args.increment)
     output = []
     for region in db.getAllRegions():
 
@@ -19,7 +19,10 @@ def main(args=None):
             before, after, votes_taken, party = rec
             output.append(engine.toDict(before, after, party, votes_taken))
 
-    print(json.dumps(output))
+    if args.output:
+        with open('data/recommend.json', 'w') as outfile:  
+            json.dump(output, outfile)
+    json.dumps(output)
 
     return 0
 
@@ -30,8 +33,12 @@ def parseargs(args):
         )
     parser.add_argument("-r", "--region", type=str,
                         help="Generate recommentation for specific region")
+    parser.add_argument("-u", "--update", action="store_true",
+                        help="Update input files from GitHub")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Show more detailed output")
+    parser.add_argument("-o", "--output", action="store_true",
+                        help="Output a recommendation file")
     parser.add_argument("-i", "--increment", type=int, default=10000,
                         help="vote increment for each iteration")
 

@@ -13,7 +13,12 @@ class DatabaseHelper(object):
     def __init__(self, recreate: bool = False):
 
         self.recreate = recreate
-        self.db_file = 'data/recommend_engine.db'
+
+        if recreate:
+            self.db_file = 'https://dbhub.io/DrNickMartin/recommend_engine.db'
+        else:
+            self.db_file = 'data/recommend_engine.db'
+        
         self.pathA = 'data/A.csv'
         self.pathB = 'data/B.csv'
         self.pathC = 'data/C.csv'
