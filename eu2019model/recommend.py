@@ -13,7 +13,7 @@ def main(args=None):
         increment = 10000
         output = False
     else:
-        update = True
+        update = args.update
         increment = args.increment
         output = args.output
 

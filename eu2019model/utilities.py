@@ -13,19 +13,14 @@ class DatabaseHelper(object):
     def __init__(self, recreate: bool = False):
 
         self.recreate = recreate
+        self.db_file = 'data/recommend_engine.db'
 
-        if recreate:
-            self.db_file = 'data/recommend_engine.db'
-        else:
-            self.db_file = 'https://dbhub.io/DrNickMartin/recommend_engine.db'
-            
         self.pathA = 'data/A.csv'
         self.pathB = 'data/B.csv'
         self.pathC = 'data/C.csv'
         self.pathD = 'data/D'
 
         self.getConnection()
-
         if self.recreate:
             self.downloadInputs()
             self.createDatabase()
@@ -96,10 +91,15 @@ class DatabaseHelper(object):
 
     def getConnection(self):
 
-        if self.recreate and os.path.isfile(self.db_file):
-            os.remove(self.db_file)
+        if self.recreate:
+            if os.path.isfile(self.db_file):
+                os.remove(self.db_file)
+        else:
+            file = 'https://github.com/remainvoter/eu2019model/blob/master/data/recommend_engine.db?raw=true'
+            r = requests.get(file, allow_redirects=True)
+            open(self.db_file, 'wb').write(r.content)
 
-        conn = sqlite3.connect(self.db_file, uri=True)
+        conn = sqlite3.connect(self.db_file)
         conn.text_factory = str
         self.cur = conn.cursor()
 
