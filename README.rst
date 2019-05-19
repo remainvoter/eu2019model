@@ -39,13 +39,13 @@ by completing the following:
 
         cd eu2019model
         pip install pipenv
-        pipenv install
+        pipenv install --dev
 
 3. run the module from within the environment:
 
 .. code-block::
 
-        pipenv run python -m eu2019model.recommend -h
+        pipenv run python -m eu2019model.recommend
 
 To Do
 --------
