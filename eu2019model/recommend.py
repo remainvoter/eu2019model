@@ -36,7 +36,7 @@ def main(args=None):
     if output:
         with open('data/recommend.json', 'w') as outfile:
             json.dump(data, outfile)
-    print(json.dumps(data))
+    print(json.dumps(data, indent=2))
 
     return 0
 
