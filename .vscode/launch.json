@@ -10,7 +10,7 @@
             "type": "python",
             "request": "launch",
             "module": "eu2019model.recommend",
-            "args": ["--output"]
+            "args": ["--output","--update"]
         }
     ]
 }

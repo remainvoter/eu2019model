@@ -36,11 +36,11 @@ class Party(object):
         self.votes += additionalVotes
 
     def updateScore(self):
-        self.score = self.votes/math.floor(self.seats+1)
+        self.score = int(math.floor(self.votes/(self.seats+1)))
 
     def __str__(self):
-        return (f"{self.name:<16} | "
-                f"Votes: {self.votes:9.0f} | "
+        return (f"{self.name:<17} | "
+                f"Votes: {self.score:9.0f} | "
                 f"Seats: {self.seats}")
 
     def isSNPorPlaid(self):
@@ -139,7 +139,7 @@ class Region(object):
     def getPartyIndex(self, name):
         for i, p in enumerate(self.dh.parties):
             if p.equal(name):
-                return i
+                return int(i)
         raise Exception("Couldn't find party")
 
     def isRemain(self):
@@ -225,16 +225,66 @@ class RecommendationEngine(object):
 
         print(','.join(print_line))
 
-    def recommendRegion(self, region: Region, max_iters: int = 5000):
-        """Do this for each region..."""
+    def addRiskFactor(self, region: Region):
+        from . import constants
+        risk_check = region.copy()
 
-        if region.isRemain():
-            return None
+        # Calculate risk factor
+        # If there aren't any remain parties then risk factor is 0:
+        have_remain = False
+        for p in risk_check.dh.parties:
+            if p.name in constants.recommended_parties and p.seats > 0:
+                have_remain = True
+                break
+
+        if have_remain:
+            # Find lowest remain seat:
+            max_order = 0
+            risk_party = None
+            for p in risk_check.dh.parties:
+                if p.name in constants.recommended_parties and p.seats > 0:
+                    if p.order > max_order:
+                        max_order = int(p.order)
+                        risk_party = p.copy()
+
+            # Calculate number of votes to loose seat
+            curr_seats = int(risk_party.seats)
+            inc = 100
+            votes_removed = 0
+
+            while risk_party.seats == curr_seats:
+                # Remove votes from risk party and add to brexit party
+                p_ind = risk_check.getPartyIndex(risk_party.name)
+                bp_ind = risk_check.getPartyIndex('Brexit Party')
+                risk_check.dh.parties[p_ind].votes -= inc
+                risk_check.dh.parties[bp_ind].votes += inc
+
+                risk_check.reset()
+                risk_check.simulate()
+                votes_removed += inc
+                p_ind = risk_check.getPartyIndex(risk_party.name)
+                risk_party = risk_check.dh.parties[p_ind].copy()
+            risk = math.floor((1/votes_removed)*8000)/100
+
+            # Add risk% votes to the at risk party
+            p_ind = region.getPartyIndex(risk_party.name)
+            pop = region.population
+            to = region.turnout/100
+            add_votes = pop*to*risk
+            if add_votes > 0:
+                region.dh.parties[p_ind].votes += add_votes
+
+    def recommendRegion(self, region: Region, risk: bool, max_iters: int = 5000):
+        """Do this for each region..."""
 
         if region.dh.verbose:
             print(f"Initial simulation for {region.name}")
+
         region.simulate()
         before = region.copy()
+
+        if risk:
+            self.addRiskFactor(region)
 
         votes_to_add = 0
         for i in range(max_iters):  # Incrememnt loop

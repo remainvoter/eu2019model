@@ -3,6 +3,7 @@ from typing import List
 import os
 import requests
 import csv
+import math
 
 from .models import Region, Party, VoteIntention
 from .constants import recommended_parties, main_parties
@@ -52,8 +53,11 @@ class DatabaseHelper(object):
             main = party_name in main_parties
 
             parties.append(Party(
-                party, percentage*(pop*turnout/100)/100,
-                pro_eu, main))
+                    party,
+                    int(math.floor(pop*(percentage/100)*(turnout/100))),
+                    pro_eu,
+                    main
+                ))
 
         return Region(name, parties, seats, pop, turnout)
 

@@ -65,7 +65,7 @@ class Dhondt(object):
                 winner.order = s
 
             if self.verbose:
-                print(f"Round {s+1}: Party {winner.name} wins!")
+                print(f"Round {s+1}: {winner.name} wins!")
 
             for party in self.parties:
                 party.updateScore()
