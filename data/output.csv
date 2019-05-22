@@ -1,0 +1,49 @@
+Pre-Simuation Results:
+Party:,Brexit Party,Change UK,Conservative,Green,Labour,Liberal Democrats,Other,Plaid Cymru,SNP,UKIP
+East Midlands,2,0,1,0,1,1,0,0,0,0
+East of England,3,0,1,1,1,1,0,0,0,0
+London,2,0,1,1,2,2,0,0,0,0
+North East,2,0,0,0,1,0,0,0,0,0
+North West,3,0,1,0,3,1,0,0,0,0
+Scotland,1,0,0,0,1,1,0,0,3,0
+South East,4,0,1,1,2,2,0,0,0,0
+South West,4,0,0,0,1,1,0,0,0,0
+Wales,2,0,0,0,1,0,0,1,0,0
+West Midlands,3,0,1,0,2,1,0,0,0,0
+Yorkshire and the Humber,3,0,0,0,2,1,0,0,0,0
+Total,29,0,6,3,17,11,0,1,3,0
+""
+Affiliation:,Hard Brexit,Remain,Soft Brexit
+Total:,29,18,23
+""
+Post-Simuation Results:
+Party:,Brexit Party,Change UK,Conservative,Green,Labour,Liberal Democrats,Other,Plaid Cymru,SNP,UKIP
+East Midlands,2,0,0,1,1,1,0,0,0,0
+East of England,3,0,0,2,1,1,0,0,0,0
+London,2,1,0,1,2,2,0,0,0,0
+North East,2,0,0,0,0,1,0,0,0,0
+North West,3,0,0,1,3,1,0,0,0,0
+Scotland,1,0,0,0,0,1,0,0,4,0
+South East,4,1,1,1,1,2,0,0,0,0
+South West,3,0,0,1,1,1,0,0,0,0
+Wales,2,0,0,0,0,1,0,1,0,0
+West Midlands,3,0,1,1,1,1,0,0,0,0
+Yorkshire and the Humber,3,0,0,1,1,1,0,0,0,0
+Total,28,2,2,9,11,13,0,1,4,0
+""
+Affiliation:,Hard Brexit,Remain,Soft Brexit
+Total:,28,29,13
+""
+Recommendations:
+Region,Party,Defensive Seat
+East Midlands,Green,False
+East of England,Green,True
+London,Change UK,False
+North East,Liberal Democrats,False
+North West,Green,False
+Scotland,Liberal Democrats,False
+South East,Change UK,False
+South West,Green,False
+Wales,Liberal Democrats,False
+West Midlands,Green,False
+Yorkshire and the Humber,Green,False

@@ -7,7 +7,8 @@ import math
 class Party(object):
 
     def __init__(self, name: str, votes: int, proEU: bool,
-                 main: bool, order: int = 100, seats: int = 0):
+                 main: bool, order: int = 100, seats: int = 0,
+                 affiliation: str = "", at_risk: bool = False):
         self.name: str = name
         self.votes: int = votes
         self.seats: int = seats
@@ -15,6 +16,8 @@ class Party(object):
         self.proEU: bool = proEU
         self.main: bool = main
         self.order: int = order
+        self.affiliation: str = affiliation
+        self.at_risk: bool = at_risk
 
     def copy(self):
         return Party(
@@ -23,7 +26,9 @@ class Party(object):
             bool(self.proEU),
             bool(self.main),
             int(self.order),
-            int(self.seats))
+            int(self.seats),
+            str(self.affiliation),
+            bool(self.at_risk))
 
     def addSeat(self):
         self.seats += 1
@@ -74,6 +79,46 @@ class Region(object):
             int(self.dh.numOfSeats),
             int(self.population),
             float(self.turnout))
+
+    def toCSV(self, first_line: bool, last_line: bool, tally: dict):
+
+        lines = []
+        self.dh.parties.sort(key=lambda p: p.name)
+
+        if first_line:
+            row1 = ["Party:"]
+            for party in self.dh.parties:
+                if party.name not in tally.keys():
+                    tally[party.name] = []
+                row1.append(party.name)
+            lines.append(row1)
+
+        row = [self.name]
+        for party in self.dh.parties:
+            row.append(f"{party.seats}")
+            tally[party.name].append(party.seats)
+        lines.append(row)
+
+        if last_line:
+            rowm2 = ["Total"]
+            rowm1 = [""]
+            aff_tot = {}
+            for party in self.dh.parties:
+                rowm2.append(sum(tally[party.name]))
+                if party.affiliation not in aff_tot.keys():
+                    aff_tot[party.affiliation] = 0
+                aff_tot[party.affiliation] += sum(tally[party.name])
+            rowaf1 = ["Affiliation:"]
+            rowaf2 = ["Total:"]
+            for k, v in aff_tot.items():
+                rowaf1.append(k)
+                rowaf2.append(str(v))
+            lines.append(rowm2)
+            lines.append(rowm1)
+            lines.append(rowaf1)
+            lines.append(rowaf2)
+
+        return lines, tally
 
     def isScotlandOrWales(self):
         return self.name in ['Scotland', 'Wales']
@@ -273,6 +318,13 @@ class RecommendationEngine(object):
             add_votes = pop*to*risk
             if add_votes > 0:
                 region.dh.parties[p_ind].votes += add_votes
+                region.dh.parties[p_ind].at_risk = True
+                return p_ind
+            else:
+                return None
+
+        else:
+            return None
 
     def recommendRegion(self, region: Region, risk: bool, max_iters: int = 5000):
         """Do this for each region..."""
@@ -284,7 +336,9 @@ class RecommendationEngine(object):
         before = region.copy()
 
         if risk:
-            self.addRiskFactor(region)
+            ind = self.addRiskFactor(region)
+            if ind is not None:
+                before.dh.parties[ind].at_risk = True
 
         votes_to_add = 0
         for i in range(max_iters):  # Incrememnt loop

@@ -1,6 +1,7 @@
 import sys
 import argparse
 import json
+import csv
 
 from .models import RecommendationEngine
 # from . import constants
@@ -21,17 +22,43 @@ def main(args=None):
         risk = args.defence
 
     data = []
+    befores = []
+    afters = []
+    rec_parties = []
     engine = RecommendationEngine(increment, update)
     for region in engine.getAllRegions():
         rec = engine.recommendRegion(region, risk)
         if rec is not None:
             before, after, votes_taken, party = rec
+            befores.append(before)
+            afters.append(after)
+            rec_parties.append(party)
             data.append(engine.toDict(before, after, party, votes_taken))
-            # engine.print(before, after, party, votes_taken)
 
     # # Create csv file from data:
-    # for region in engine.getAllRegions():
-    #     for party in engine.getAllParties():
+    with open('data/output.csv', 'w') as f:
+        writer = csv.writer(f)
+        tally = {}
+        writer.writerow(["Pre-Simuation Results:"])
+        for i, bef in enumerate(befores):
+            lines, tally = bef.toCSV(i == 0, i == (len(befores)-1), tally)
+            for l in lines:
+                writer.writerow(l)
+        writer.writerow([""])
+
+        writer.writerow(["Post-Simuation Results:"])
+        tally = {}
+        for i, aft in enumerate(afters):
+            lines, tally = aft.toCSV(i == 0, i == (len(afters)-1), tally)
+            for l in lines:
+                writer.writerow(l)
+        writer.writerow([""])
+
+        writer.writerow(["Recommendations:"])
+        writer.writerow(["Region", "Party", "Defensive Seat"])
+        for aft, party in zip(afters, rec_parties):
+            row = [aft.name, party.name, "True" if party.at_risk else "False"]
+            writer.writerow(row)
 
     if output:
         with open('data/recommend.json', 'w') as outfile:

@@ -6,7 +6,7 @@ import csv
 import math
 
 from .models import Region, Party, VoteIntention
-from .constants import recommended_parties, main_parties
+from . import constants
 
 
 class DatabaseHelper(object):
@@ -49,14 +49,26 @@ class DatabaseHelper(object):
         self.cur.execute(q)
         for party, percentage in self.cur.fetchall():
             party_name = party
-            pro_eu = party_name in recommended_parties
-            main = party_name in main_parties
+            pro_eu = party_name in constants.recommended_parties
+            main = party_name in constants.main_parties
+
+            if pro_eu:
+                affil = "Remain"
+            elif party_name in constants.soft_brexit_parties:
+                affil = "Soft Brexit"
+            elif party_name in constants.brexit_parties:
+                affil = "Hard Brexit"
+            else:
+                raise Exception("Coundn't find party affiliation")
 
             parties.append(Party(
                     party,
                     int(math.floor(pop*(percentage/100)*(turnout/100))),
                     pro_eu,
-                    main
+                    main,
+                    100,
+                    0,
+                    affil
                 ))
 
         return Region(name, parties, seats, pop, turnout)
