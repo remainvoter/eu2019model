@@ -45,13 +45,15 @@ by completing the following:
 
 .. code-block::
 
-        pipenv run python -m eu2019model.recommend
+        pipenv run python -m eu2019model.recommend --update --defence
 
-To Do
---------
+Authors
+-------
 
-* Fix travis-CI
-* Dploy to PyPi
+This model was developed by the Remain Voter group, an independent group of volunteers who wanted to provide helpful, data driven recommendations for those unsure which remain party to vote for in the EU elections. Full details of the implementation method and assumptions made in the model can be found on the Remain Voter website: https://www.remainvoter.com.
+
+Lead model designer: Cheryl Hung
+Principal developer: Nick Martin
 
 Credits
 -------
