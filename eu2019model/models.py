@@ -292,6 +292,9 @@ class RecommendationEngine(object):
                         max_order = int(p.order)
                         risk_party = p.copy()
 
+            if risk_party is None:
+                return None
+
             # Calculate number of votes to loose seat
             curr_seats = int(risk_party.seats)
             inc = 100
@@ -310,6 +313,7 @@ class RecommendationEngine(object):
                 p_ind = risk_check.getPartyIndex(risk_party.name)
                 risk_party = risk_check.dh.parties[p_ind].copy()
             risk = math.floor((1/votes_removed)*8000)/100
+            print(f"{risk_check.name}, {risk_party.name}:, {votes_removed}")
 
             # Add risk% votes to the at risk party
             p_ind = region.getPartyIndex(risk_party.name)
