@@ -134,12 +134,12 @@ class DatabaseHelper(object):
             os.remove(self.pathD)
 
         urlA = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/A_expected_total_voters.csv'
-        urlB = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/B_EU_2019_intentions.csv'
+        urlB = 'https://raw.githubusercontent.com/remainvoter/eu2019/pollingData-2019-05-22-A/input_data/B_EU_2019_intentions.csv'
         urlC = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/C_voter_swings.csv'
         urlD = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/D_increased_turnout_percentage'
 
         tokenA = 'AD4HAFJRK7OCZC77UFN42YS46LZNW'
-        tokenB = 'AD4HAFO77NE4I7PHHAGL4ES46LZQ4'
+        tokenB = 'AD4HAFKW5BIU2RH2WRZVQF246L5M4'
         tokenC = 'AD4HAFMW7TDWR57VGUMMKOC46LZSU'
         tokenD = 'AD4HAFPD4DCTAPQOARWSDPC46LZTY'
 
