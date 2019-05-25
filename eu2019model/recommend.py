@@ -25,6 +25,7 @@ def main(args=None):
     befores = []
     afters = []
     rec_parties = []
+    votes = []
     engine = RecommendationEngine(increment, update)
     for region in engine.getAllRegions():
         rec = engine.recommendRegion(region, risk)
@@ -33,6 +34,7 @@ def main(args=None):
             befores.append(before)
             afters.append(after)
             rec_parties.append(party)
+            votes.append(votes_taken)
             data.append(engine.toDict(before, after, party, votes_taken))
 
     # # Create csv file from data:
@@ -55,9 +57,14 @@ def main(args=None):
         writer.writerow([""])
 
         writer.writerow(["Recommendations:"])
-        writer.writerow(["Region", "Party", "Defensive Seat"])
-        for aft, party in zip(afters, rec_parties):
-            row = [aft.name, party.name, "True" if party.at_risk else "False"]
+        writer.writerow(["Region", "Party", "Defensive Seat", "Votes", "Danger party"])
+        for aft, party, votes in zip(afters, rec_parties, votes):
+            row = [
+                aft.name,
+                party.name,
+                "True" if party.at_risk else "False",
+                int(votes),
+                aft.danger_party]
             writer.writerow(row)
 
     if output:

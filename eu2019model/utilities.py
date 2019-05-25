@@ -138,10 +138,10 @@ class DatabaseHelper(object):
         urlC = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/C_voter_swings.csv'
         urlD = 'https://raw.githubusercontent.com/remainvoter/eu2019/master/input_data/D_increased_turnout_percentage'
 
-        tokenA = 'AD4HAFLEN3FLZWBTTAEGMQ24433AO'
-        tokenB = 'AD4HAFNDJCMIAM4PFST6GJK4434YW'
-        tokenC = 'AD4HAFKRIN53DM3UANNX3G24434Z6'
-        tokenD = 'AL7PP3PYUFDUJWKPBCO2IZC45GQAQ'
+        tokenA = 'AD4HAFJRK7OCZC77UFN42YS46LZNW'
+        tokenB = 'AD4HAFO77NE4I7PHHAGL4ES46LZQ4'
+        tokenC = 'AD4HAFMW7TDWR57VGUMMKOC46LZSU'
+        tokenD = 'AD4HAFPD4DCTAPQOARWSDPC46LZTY'
 
         rA = requests.get(f'{urlA}?token={tokenA}', allow_redirects=True)
         rB = requests.get(f'{urlB}?token={tokenB}', allow_redirects=True)

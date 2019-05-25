@@ -58,7 +58,7 @@ class Party(object):
 class Region(object):
 
     def __init__(self, name: str, parties: List[Party],
-                 numOfSeats: int, population: int, turnout: float):
+                 numOfSeats: int, population: int, turnout: float, danger_party: str = "None"):
         from .dhondt import Dhondt
         self.dh = Dhondt(numOfSeats)
         self.dh.addParties(parties)
@@ -66,6 +66,7 @@ class Region(object):
         self.computed = False
         self.population = population
         self.turnout = turnout
+        self.danger_party = danger_party
 
     def copy(self):
 
@@ -78,7 +79,8 @@ class Region(object):
             new_parties,
             int(self.dh.numOfSeats),
             int(self.population),
-            float(self.turnout))
+            float(self.turnout),
+            str(self.danger_party))
 
     def toCSV(self, first_line: bool, last_line: bool, tally: dict):
 
@@ -126,6 +128,11 @@ class Region(object):
     def reset(self):
         for p in self.dh.parties:
             p.reset()
+
+    def getSortedParties(self):
+        pc = self.copy().dh.parties
+        pc.sort(key=lambda p: p.name)
+        return pc
 
     def compare(self, other):
         for p in self.dh.parties:
@@ -345,7 +352,7 @@ class RecommendationEngine(object):
                 before.dh.parties[ind].at_risk = True
 
         votes_to_add = 0
-        for i in range(max_iters):  # Incrememnt loop
+        while True:
             votes_to_add += self.voteIncrement
             party_list = copy.deepcopy(region.dh.parties)
             for party in party_list:
@@ -362,8 +369,25 @@ class RecommendationEngine(object):
                 region.reset()
                 region.simulate()
 
+                # Check if any remain parties have lost seats
+                danger_party = None
+                for pbf, paf in zip(before.getSortedParties(), region.getSortedParties()):
+
+                    if pbf.name == party.name:
+                        continue
+
+                    if not pbf.name == paf.name:
+                        raise Exception("Something went wrong sorting the parties..")
+
+                    if pbf.proEU and (pbf.seats < paf.seats):
+                        print(f"{paf.name} lost a seat in {region.name} "
+                              f"with {votes_added}...")
+                        danger_party = paf.copy()
+
                 # Should we recommend?
                 if region.moreRamainSeats(before):
+                    if danger_party is not None:
+                        region.danger_party = danger_party.name
                     return (
                         before.copy(),
                         region.copy(),
